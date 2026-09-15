@@ -30,7 +30,26 @@
     font-family: 'Cairo', sans-serif;
     line-height: 1.9;
     min-height: 100vh;
+    /* ✅ التحديد والنسخ مسموحين عادي */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
+
+  /* منع سحب الصور فقط */
+  img, svg {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: none; /* يمنع كليك يمين على الصور */
+  }
+
+  /* إخفاء الصفحة عند الطباعة */
+  @media print { body { display: none !important; } }
+
   /* ===== Header ===== */
   .hero {
     text-align: center;
@@ -189,9 +208,37 @@
     font-size: 13px;
   }
   .footer .gold-t { font-size: 15px; }
+
+  /* ====== 🔒 شاشة القفل عند فتح أدوات المطور ====== */
+  #lockScreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: #0b0b0d;
+    color: var(--gold-2);
+    font-family: 'Cairo', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    padding: 40px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #lockScreen span { font-size: 48px; }
+  #lockScreen small { color: var(--muted); font-size: 15px; font-weight: 400; }
 </style>
 </head>
 <body>
+
+<!-- ====== 🔒 شاشة القفل ====== -->
+<div id="lockScreen">
+  <span>🔒</span>
+  <div>تم إيقاف العرض مؤقتًا</div>
+  <small>أغلق أدوات المطوّر (F12) ثم أعد تحميل الصفحة</small>
+</div>
 
 <div class="hero">
   <div class="crown">👑</div>
@@ -452,6 +499,110 @@
   <div style="font-size: 15px; font-weight: bold;">Created By <span class="gold-t">Kemo</span> &amp; <span class="gold-t">Black</span></div>
   مود حرب القلعتين — بناء تلقائي، وحوش ذكية، حرب واقعية، وبقاء صفر بقايا على التضاريس.
 </div>
+
+
+<!-- ============================================================
+     🔒  سكربت الحماية — يسمح بالتحديد والنسخ العادي
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- 1) منع كليك يمين (قائمة السياق) ---------- */
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    return false;
+  }, false);
+
+  /* ---------- 2) منع اختصارات الوصول للسورس كود ---------- */
+  document.addEventListener("keydown", function (e) {
+    var k = (e.key || "").toLowerCase();
+    var code = e.keyCode || e.which;
+
+    // F12
+    if (code === 123 || k === "f12") { e.preventDefault(); return false; }
+
+    // Ctrl+Shift+I / J / C / K  (أدوات المطور)
+    if (e.ctrlKey && e.shiftKey && ["i", "j", "c", "k"].indexOf(k) !== -1) {
+      e.preventDefault(); return false;
+    }
+
+    // Ctrl+U (عرض السورس) / Ctrl+S (حفظ) / Ctrl+P (طباعة)
+    if (e.ctrlKey && !e.shiftKey && ["u", "s", "p"].indexOf(k) !== -1) {
+      e.preventDefault(); return false;
+    }
+
+    // Firefox: Ctrl+Shift+E / Ctrl+Shift+M
+    if (e.ctrlKey && e.shiftKey && ["e", "m"].indexOf(k) !== -1) {
+      e.preventDefault(); return false;
+    }
+
+    // Shift+F10 (كليك يمين من الكيبورد)
+    if (e.shiftKey && code === 121) { e.preventDefault(); return false; }
+  }, false);
+
+  /* ---------- 3) منع سحب الصور والروابط فقط ---------- */
+  document.addEventListener("dragstart", function (e) {
+    if (e.target && e.target.tagName && ["IMG","A","SVG"].indexOf(e.target.tagName) !== -1) {
+      e.preventDefault();
+    }
+  }, false);
+
+  /* ---------- 4) منع فتح الصفحة داخل iframe (سرقة بالتضمين) ---------- */
+  try {
+    if (window.top !== window.self) {
+      window.top.location = window.self.location;
+    }
+  } catch (err) {
+    document.documentElement.innerHTML = "";
+  }
+
+  /* ---------- 5) رسالة تحذير في الكونسول ---------- */
+  try {
+    console.log("%c⚠️ تحذير: هذا المحتوى محمي ومسجّل.", "color:#d4af37;font-size:26px;font-weight:900;text-shadow:0 0 10px #000;");
+    console.log("%cأي محاولة نسخ أو إعادة نشر تُتابَع قانونيًا.", "color:#ff5d5d;font-size:16px;font-weight:700;");
+  } catch (e) {}
+
+  /* ---------- 6) كشف أدوات المطوّر وإظهار شاشة القفل ---------- */
+  var lockScreen = document.getElementById("lockScreen");
+  var threshold = 170;
+
+  function lockPage() {
+    if (!lockScreen) return;
+    lockScreen.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+  function unlockPage() {
+    if (!lockScreen) return;
+    lockScreen.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  setInterval(function () {
+    var wDiff = window.outerWidth - window.innerWidth;
+    var hDiff = window.outerHeight - window.innerHeight;
+    if (wDiff > threshold || hDiff > threshold) {
+      lockPage();
+    } else {
+      unlockPage();
+    }
+  }, 900);
+
+  /* ---------- 7) فخ الـ debugger ---------- */
+  setInterval(function () {
+    var t0 = performance.now();
+    (function () { return false; })["constructor"]("debugger")();
+    var t1 = performance.now();
+    if (t1 - t0 > 120) { lockPage(); }
+  }, 1500);
+
+  /* ---------- 8) منع فتح تاب جديد بكليك عجلة الفأرة على الروابط ---------- */
+  document.addEventListener("auxclick", function (e) {
+    if (e.button === 1) e.preventDefault();
+  }, false);
+
+})();
+</script>
 
 </body>
 </html>
