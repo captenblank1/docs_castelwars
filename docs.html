@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CastleWars — دليل المود الكامل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --bg-2: #121216;
+    --card: #16161b;
+    --card-2: #1b1b22;
+    --gold: #d4af37;
+    --gold-2: #f5d061;
+    --gold-dim: #8a7322;
+    --text: #e8e4d8;
+    --muted: #9a948a;
+    --blue: #4d8dff;
+    --red: #ff5d5d;
+    --green: #58c97b;
+    --border: #2a2a33;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    line-height: 1.9;
+    min-height: 100vh;
+  }
+  /* ===== Header ===== */
+  .hero {
+    text-align: center;
+    padding: 70px 20px 50px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212,175,55,.18), transparent),
+      linear-gradient(180deg, #101014 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .crown { font-size: 56px; }
+  .hero h1 {
+    font-size: 46px;
+    font-weight: 900;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold), #9a7b1e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+  }
+  .hero p.sub { color: var(--muted); font-size: 18px; margin-top: 6px; }
+  .hero .badges { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-2);
+    background: rgba(212,175,55,.07);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  /* ===== Layout ===== */
+  .wrap { max-width: 1050px; margin: 0 auto; padding: 40px 20px 80px; }
+  nav.toc {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin: 30px 0 10px;
+  }
+  nav.toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: .2s;
+  }
+  nav.toc a:hover { border-color: var(--gold); color: var(--gold-2); }
+  section { margin-top: 55px; }
+  h2 {
+    font-size: 27px;
+    font-weight: 900;
+    color: var(--gold-2);
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(90deg, var(--gold), transparent) 1;
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+  }
+  h3 { color: var(--gold-2); font-size: 18px; margin: 26px 0 10px; }
+  p  { color: var(--text); }
+  .muted { color: var(--muted); }
+  /* ===== Cards ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 14px 0;
+  }
+  .card:hover { border-color: #3d3a2a; }
+  .card h4 { color: var(--gold-2); font-size: 16px; margin-bottom: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  /* ===== Command blocks ===== */
+  .cmd {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: #0e0e12;
+    border: 1px solid var(--gold-dim);
+    border-radius: 8px;
+    color: var(--gold-2);
+    padding: 6px 14px;
+    margin: 3px 0;
+    direction: ltr;
+    unicode-bidi: embed;
+    word-break: break-all;
+  }
+  .arg { color: #c9b96a; }
+  .req { color: var(--red); }
+  .opt { color: #6fb3ff; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+  th {
+    background: linear-gradient(180deg, #26241c, #1b1a14);
+    color: var(--gold-2);
+    padding: 10px 14px;
+    text-align: right;
+    border: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    vertical-align: top;
+  }
+  tr:hover td { background: var(--card-2); }
+  code.k {
+    font-family: 'JetBrains Mono', monospace;
+    background: #0e0e12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1px 8px;
+    color: #d8c983;
+    font-size: 13px;
+    direction: ltr;
+    unicode-bidi: embed;
+  }
+  .blue-t { color: var(--blue); font-weight: 700; }
+  .red-t  { color: var(--red); font-weight: 700; }
+  .green-t{ color: var(--green); font-weight: 700; }
+  .gold-t { color: var(--gold-2); font-weight: 700; }
+  ul.clean { list-style: none; }
+  ul.clean li { padding-right: 26px; position: relative; margin: 6px 0; }
+  ul.clean li::before {
+    content: "◆";
+    position: absolute; right: 0;
+    color: var(--gold);
+    font-size: 11px;
+    top: 5px;
+  }
+  .note {
+    background: rgba(212,175,55,.06);
+    border-right: 3px solid var(--gold);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+  .warn {
+    background: rgba(255,93,93,.06);
+    border-right: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .footer .gold-t { font-size: 15px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="crown">👑</div>
+  <h1>⚔ CastleWars ⚔</h1>
+  <p class="sub">حرب القلعتين — دليل المود الكامل لسيرفر Minecraft (Paper / Spigot 1.20 – 1.21)</p>
+  <div class="badges">
+    <span class="badge">إصدار 2.4</span>
+    <span class="badge">صلاحية الإدارة: castlewars.admin</span>
+    <span class="badge">الأمر الرئيسي: /castlewars أو /cw</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<nav class="toc">
+  <a href="#start">🚀 البداية</a>
+  <a href="#build">🏰 البناء</a>
+  <a href="#bridge">🌉 الجسر</a>
+  <a href="#door">🚪 البوابات</a>
+  <a href="#mobs">👾 الوحوش</a>
+  <a href="#hp">❤️ HP والمؤقت</a>
+  <a href="#teams">🔵 الفرق</a>
+  <a href="#admin">🛠 إدارة</a>
+  <a href="#config">⚙️ الكونفيج</a>
+</nav>
+
+<!-- ============ البداية ============ -->
+<section id="start">
+  <h2>🚀 البداية السريعة</h2>
+  <div class="card">
+    <h4>ثلاث خطوات وتبدأ المعركة:</h4>
+    <span class="cmd">/castlewars build 40 25</span> — يبني القلعتين حولك + الجسر تحت قدميك<br>
+    <span class="cmd">/castlewars attack blue 30</span> — ترسل 30 وحش من الأزرق نحو الخصم (بدون عدد = كل الوحوش!)<br>
+    <span class="cmd">/castlewars timer 600</span> — يبدأ عد تنازلي 10 دقائق
+    <div class="note">
+      💡 <b>الاسم في نهاية أي أمر:</b> كل الأوامر تقبل اسم أو أسماء لاعبين في النهاية لتنفيذ التأثير عليهم،
+      مثال: <code class="k">/cw team_join blue Notch Steve</code> — وبدون أسماء يُنفَّذ عليك أنت.
+    </div>
+  </div>
+</section>
+
+<!-- ============ البناء ============ -->
+<section id="build">
+  <h2>🏰 بناء القلاع</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars build <span class="arg">[width] [height] [true|false]</span></span></td>
+      <td>يبني القلعتين (الأزرق غربًا والأحمر شرقًا) ثم يبني الجسر تلقائيًا وينقلك فوقه.
+        <br><span class="gold-t">width:</span> 12 – 120 &nbsp;|&nbsp; <span class="gold-t">height:</span> 8 – 60
+        <br><span class="gold-t">true/false:</span> حماية بلوكات القلعة <b>وبوابتها الحديدية</b> من الكسر — <span class="green-t">true افتراضي (محمية)</span>.
+        <br>مثال: <code class="k">/cw build 20 12 false</code> → قلاع وبوابات قابلة للكسر.
+        <br><span class="muted">ملاحظة: الأمر يحتاج لاعبًا كنقطة بناء (يُبنى حول موقعه).</span></td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars remove_building</span></td>
+      <td>يزيل القلعتين والجسر ويقتل كل الوحوش — ويستعيد التضاريس والأشجار بدقة 100%.</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars tp <span class="opt">[player]</span></span></td>
+      <td>ينقلك (أو اللاعب المحدد) فوق منتصف الجسر.</td>
+    </tr>
+  </table>
+  <div class="card">
+    <h4>خصائص القلعة:</h4>
+    <ul class="clean">
+      <li>بوابة حديدية 4×4 من <code class="k">IRON_BARS</code> لا تُكسر — تُدار بأمر <code class="k">door</code>.</li>
+      <li>أبراج أركان، شرّافات، نوافذ زجاجية ملونة، وباب حديدي كامل الشكل.</li>
+      <li>بناء متدرج طبقة-طبقة بدون تهنيج السيرفر.</li>
+      <li>منصات HP هولوغرام فوق كل قلعة + شريطا HP أعلى الشاشة.</li>
+      <li>عند هزيمة قلعة: تنهدم طبقة-طبقة بالدخان والانفجارات والاهتزاز، ثم تُبنى مكانها <span class="gold-t">قلعة بلون الفريق الفائز</span> (احتلال!) قبل التصفير.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ الجسر ============ -->
+<section id="bridge">
+  <h2>🌉 الجسر</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars bridge <span class="req">width</span> <span class="opt">[material] [true|false]</span></span></td>
+      <td>يبني جسرًا بين البوابتين فوق <b>منخفض</b> (الأرض بين القلعتين تنزل تحت مستوى سطح الجسر).
+        <br><span class="gold-t">material:</span> أي بلوك صلب — مثال <code class="k">diamond_block</code> (التاب يعرض كل البلوكات).
+        <br><span class="gold-t">true/false:</span> سياج الجسر — تغييره <b>يطبَّق فورًا</b> مع نفس الأمر بدون حاجة لإعادة بناء من الصفر.
+        <br>المادة وحالة السياج <b>محفوظتان في الكونفيج</b> وتُطبَّق على كل إعادة بناء تلقائية.
+        <br>مثال: <code class="k">/cw bridge 20 diamond_block false</code></td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars remove_bridge</span></td>
+      <td>يزيل الجسر بالكامل (السطح والسياج وأعمدة الدعم) ويستعيد كل ما كان بين القلعتين.</td>
+    </tr>
+  </table>
+  <div class="card">
+    <h4>خصائص الجسر:</h4>
+    <ul class="clean">
+      <li>سور جانبي بارتفاع بلوكين متصل بالكامل، ومحمي من الكسر والانفجارات.</li>
+      <li>المنخفض تحت الجسر (قابل للتعديل من <code class="k">arena-pit-depth</code>) يجعل الجسر مرتفعًا فعليًا عن الأرض.</li>
+      <li>أعمدة حجرية تحت الجسر كل 8 بلوكات تمتد حتى قاع المنخفض.</li>
+      <li>أي إعادة بناء للجسر (يدوي أو تلقائي مع reset) تنقل اللاعبين فوق منتصفه تلقائيًا.</li>
+      <li>الوحوش التي تُدفع أو تسقط خارج سطح الجسر تُعاد تلقائيًا إلى مدخل جسر فريقها كل لحظات.</li>
+      <li>البلوكات التي تضعها أنت فوق أرضية الجسر تبقى قابلة للكسر عادي.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ البوابات ============ -->
+<section id="door">
+  <h2>🚪 البوابات الحديدية</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars door <span class="opt">[blue|red|both]</span></span></td>
+      <td>يملّي البوابة بالحديد بالكامل — بدون خيارات = القلعتين معًا. (لا يفتح أبدًا)</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars remove_door <span class="opt">[blue|red|both]</span></span></td>
+      <td>يشيل قضبان الحديد — هذه هي طريقة "فتح" البوابة.</td>
+    </tr>
+  </table>
+  <div class="note">🚫 البوابة الحديدية محصنة من الكسر عندما تكون بلوكات القلعة محمية (<code class="k">build ... true</code>).
+    ولو بنيت بـ <code class="k">false</code> تصبح البوابة قابلة للكسر مثل باقي بلوكات القلعة.</div>
+</section>
+
+<!-- ============ الوحوش ============ -->
+<section id="mobs">
+  <h2>👾 وحوش الهجوم</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars attack <span class="req">blue|red|both</span> <span class="opt">[mob|random]</span> <span class="opt">[count]</span></span></td>
+      <td>يرسل وحوش من الفريق نحو الخصم (حتى 200).
+        <br><span class="gold-t">بدون عدد:</span> يخرج <b>كل الوحوش</b> (نوع من كل نوع في الخليط) — مثال <code class="k">/cw attack both</code>.
+        <br><span class="gold-t">random:</span> خليط عشوائي (أول اقتراح في التاب).
+        <br><span class="gold-t">نوع بدون عدد:</span> 10 من النوع — مثال <code class="k">/cw attack blue husk</code>.
+        <br>مثال: <code class="k">/cw attack blue husk 10</code></td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars remove_attack <span class="req">blue|red|both</span> <span class="opt">[mob|random] [count]</span></span></td>
+      <td>عكس attack بالضبط — يحذف الوحوش: <code class="k">remove_attack blue</code> كل الأزرق،
+        <code class="k">remove_attack blue husk</code> كل الهاسك،
+        <code class="k">remove_attack blue husk 10</code> عشرة فقط، ويمكن <code class="k">remove_attack both 15</code>.</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars double <span class="req">blue|red|both</span> <span class="req">seconds</span></span></td>
+      <td>يضاعف قوة وحوش الفريق ×2 (الحاليين والجدد) لمدة محددة بالثواني ثم يعودون طبيعيًا تلقائيًا.</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars freeze <span class="req">blue|red|both</span> <span class="req">seconds</span></span></td>
+      <td>يجمد وحوش الفريق تمامًا (بدون حركة أو هجوم) للمدة المحددة ثم يفك التجميد تلقائيًا.</td>
+    </tr>
+  </table>
+  <div class="card">
+    <h4>قواعد الوحوش:</h4>
+    <ul class="clean">
+      <li> كل وحش من أي نوع يتبع نفس المنطق — يهاجم خصومه فقط، ولا يخون فريقه أبدًا.</li>
+      <li> الوحوش العادية لا تشتبك قبل تشغيل المؤقت — تظهر وتقف منتظرة.</li>
+      <li> الـ HP يظهر فوق رأس كل وحش بلون فريقه ❤.</li>
+      <li> الوحوش لا تدمر التضاريس (كريبر/تنين/إندرمان) ولا تشتعل بالنار.</li>
+      <li> <span class="gold-t">الوحوش الضخمة (البوس):</span> الواردن والدراقن نشطان طول ما الجولة شغالة — حتى بدون مؤقت.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>سلوك البوس:</h4>
+    <ul class="clean">
+      <li> <span class="gold-t">الدراقن:</span> ينزل بوجهه مقابل لقلعة العدو، يطير باتجاه وحوش العدو أو قلعته ويحوّم فوقها،
+        يقذف <b>كرات نارية انفجارية</b> كل ثانية تحرق الهدف — وعلى القلعة يقذف النار على البوابة ويخصم الضرر.</li>
+      <li> <span class="gold-t">مواجهة التنانين:</span> تنينان متقابلان يقفان وجهًا لوجه على مسافة آمنة ويتبادلان القذائف —
+        <b>لا اندماج ولا تصادم</b> بينهم أبدًا.</li>
+      <li> <span class="gold-t">الواردن:</span> سرعة هجوم مضاعفة ×4 على الوحوش والقلعة.</li>
+      <li> الضرر على القلعة يُضبط من <code class="k">dragon-damage</code> و <code class="k">warden-damage</code> في الكونفيج.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ HP والمؤقت ============ -->
+<section id="hp">
+  <h2>❤️ HP والمؤقت والحرب</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars hp <span class="req">add|remove</span> <span class="req">blue|red|both</span> <span class="req">amount</span></span></td>
+      <td><span class="gold-t">add</span> يضبط القيمة القصوى والحالية معًا — <span class="gold-t">remove</span> يخصم <b>بشكل دائم</b> من الحد الأقصى نفسه (وقد يحسم اللعبة عند الصفر).</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars full <span class="req">blue|red|both</span></span></td>
+      <td>يملأ HP الفريق للقيمة القصوى فورًا.</td>
+    </tr>
+    <tr>
+      <td><span class="cmd">/castlewars timer <span class="req">seconds|reset</span></span></td>
+      <td>عد تنازلي في BossBar فوق الشاشة. عند انتهاء الوقت يفوز صاحب الـ HP الأعلى.
+        <br>⚠️ الوحوش العادية لا تهاجم ولا تتأذى إلا والمؤقت يعمل (البوس نشط دائمًا).</td>
+    </tr>
+  </table>
+  <div class="card">
+    <h4>أجواء الحرب (طول المعركة والمؤقت شغّال):</h4>
+    <ul class="clean">
+      <li>دخان وشرر مستمر من بوابات وأسوار القلعتين.</li>
+      <li>اهتزاز يتحسه اللاعبون القريبون عند كل ضربة.</li>
+      <li>أصوات قتال عشوائية (سهام، طرق حديد، زئير، انفجارات مدوية) تُسمع من بعيد.</li>
+      <li>عند تدمير قلعة: Title فوز + انهيار متدرج + قلعة الاحتلال بلون الفائز + ألعاب نارية + تصفير تلقائي.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ الفرق ============ -->
+<section id="teams">
+  <h2>🔵 الفرق واللاعبين</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr>
+      <td><span class="cmd">/castlewars team_join <span class="req">blue|red|both</span> <span class="opt">[players...]</span></span></td>
+      <td>ينضم أنت (أو اللاعبون المحددون) للفريق.
+        <br><span class="blue-t">blue</span> = وحوش الزرق تجاهلك والأحمر يهاجموك.
+        <br><span class="red-t">red</span> = العكس.
+        <br><span class="muted">both</span> = كل الوحوش تتجاهلك (حَكَم).</td>
+    </tr>
+  </table>
+  <div class="warn">بدون فريق = كل الوحوش تتجاهلك تمامًا.</div>
+</section>
+
+<!-- ============ إدارة ============ -->
+<section id="admin">
+  <h2>🛠 أوامر الإدارة</h2>
+  <table>
+    <tr><th>الأمر</th><th>الشرح</th></tr>
+    <tr><td><span class="cmd">/castlewars status</span></td><td>حالة المعركة: المرحلة، HP، المؤقت، الجسر، الوحوش الحية.</td></tr>
+    <tr><td><span class="cmd">/castlewars reset</span></td><td>تصفير شامل فوري: وحوش + دروبس + إعادة بناء القلعتين والجسر + نقل اللاعبين للجسر.</td></tr>
+    <tr><td><span class="cmd">/castlewars help</span></td><td>قائمة الأوامر داخل اللعبة.</td></tr>
+  </table>
+</section>
+
+<!-- ============ الكونفيج ============ -->
+<section id="config">
+  <h2>⚙️ الكونفيج (يُحفظ تلقائيًا ويصمد للرستارت)</h2>
+  <table>
+    <tr><th>المفتاح</th><th>الافتراضي</th><th>الشرح</th></tr>
+    <tr><td><code class="k">default-max-hp</code></td><td>10000</td><td>HP افتراضي لكل قلعة</td></tr>
+    <tr><td><code class="k">castle-gap</code></td><td>30</td><td>المسافة بين جداري القلعتين</td></tr>
+    <tr><td><code class="k">bridge-default-width</code></td><td>20</td><td>عرض الجسر التلقائي</td></tr>
+    <tr><td><code class="k">bridge-material</code></td><td>OAK_PLANKS</td><td>مادة أرضية الجسر</td></tr>
+    <tr><td><code class="k">bridge-rails</code></td><td>true</td><td>سياج الجسر يُبنى دائمًا؟</td></tr>
+    <tr><td><code class="k">arena-pit-depth</code></td><td>4</td><td>عمق المنخفض تحت الجسر بالبلوكات (0 = بدون منخفض)</td></tr>
+    <tr><td><code class="k">castle-protect</code></td><td>true</td><td>حماية بلوكات القلاع وبواباتها</td></tr>
+    <tr><td><code class="k">dragon-damage</code></td><td>100</td><td>ضرر قذيفة التنين على قلعة العدو</td></tr>
+    <tr><td><code class="k">warden-damage</code></td><td>40</td><td>ضرر ضربة الواردن على قلعة العدو</td></tr>
+    <tr><td><code class="k">gate-damage-range</code></td><td>4.5</td><td>مدى احتساب ضرر الوحوش حول البوابة</td></tr>
+    <tr><td><code class="k">gate-damage-cap</code></td><td>100</td><td>أقصى ضرر يُخصم في كل فحص للبوابة</td></tr>
+    <tr><td><code class="k">celebration-seconds</code></td><td>10</td><td>مدة الاحتفال قبل التصفير بعد الفوز</td></tr>
+    <tr><td><code class="k">state.*</code></td><td>—</td><td>آخر قيم HP وأماكن القلعتين والجسر — تُكتب تلقائيًا ولا تُعدَّل يدويًا أثناء التشغيل</td></tr>
+  </table>
+</section>
+
+</div>
+
+<div class="footer">
+  <div class="gold-t">⚔ CastleWars 2.4 ⚔</div>
+  مود حرب القلعتين — بناء تلقائي، وحوش ذكية، حرب واقعية، وبقاء صفر بقايا على التضاريس.
+  <div style="margin-top: 8px; font-weight: bold;">Created By <span class="gold-t">Kemo</span> &amp; <span class="gold-t">Black</span></div>
+</div>
+
+</body>
+</html>
